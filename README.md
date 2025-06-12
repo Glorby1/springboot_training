@@ -44,6 +44,8 @@ Now, on postman, curl, or whatever you use for HTTP request :
    
 6. PUT USERS
    http://localhost:8080/users/{id_user}
+   { "username": "trung12", "role": "USER"
+   }
    
 8. DELETE USERS 
    http://localhost:8080/users/{id_user} #Deleting a user will automatically delete the tasks he has from the db
