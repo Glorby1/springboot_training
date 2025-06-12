@@ -35,6 +35,11 @@ public class TaskController {
     public ResponseEntity<List<TaskResponseDTO>> getTasksByUser(@PathVariable Long userId) {
         return ResponseEntity.ok(taskService.getTasksDtoByUser(userId));
     }
+    
+    @GetMapping("/me")
+    public ResponseEntity<List<TaskResponseDTO>> getMyTasks() {
+        return ResponseEntity.ok(taskService.getMyTasks());
+    }
 
     @PostMapping
     public ResponseEntity<TaskResponseDTO> createTask(@RequestBody TaskRequestDTO dto) {
@@ -47,12 +52,12 @@ public class TaskController {
 	    return ResponseEntity.ok(taskService.updateTaskFromDto(id, dto));
 	}
 	
-	@PutMapping("/{id}/done")
+	@PutMapping("me/{id}/done")
 	public ResponseEntity<TaskResponseDTO> markTaskAsDone(@PathVariable Long id) {
 	    return ResponseEntity.ok(taskService.updateTaskDoneStatus(id, true));
 	}
 
-	@PutMapping("/{id}/notdone")
+	@PutMapping("me/{id}/notdone")
 	public ResponseEntity<TaskResponseDTO> markTaskAsNotDone(@PathVariable Long id) {
 	    return ResponseEntity.ok(taskService.updateTaskDoneStatus(id, false));
 	}

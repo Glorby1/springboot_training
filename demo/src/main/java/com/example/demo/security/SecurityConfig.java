@@ -23,27 +23,22 @@ public class SecurityConfig {
             .csrf(csrf -> csrf.disable())
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+            	    .requestMatchers("/auth/**").permitAll()
 
-                // Auth libre pour inscription/login si tu veux (à adapter)
-                .requestMatchers("/auth/**").permitAll()
+            	    // D'abord les endpoints USER
+            	    .requestMatchers(HttpMethod.GET, "/tasks/me/**").hasRole("USER")
+            	    .requestMatchers(HttpMethod.PUT, "/tasks/me/{id}/done/**").hasRole("USER")
+            	    .requestMatchers(HttpMethod.PUT, "/tasks/me/{id}/notdone/**").hasRole("USER")
 
-                // ADMIN uniquement : CRUD user
-                .requestMatchers("/users/**").hasRole("ADMIN")
+            	    // Ensuite les endpoints ADMIN/SUPERVISOR
+            	    .requestMatchers("/users/**").hasRole("ADMIN")
+            	    .requestMatchers(HttpMethod.GET, "/tasks/**").hasAnyRole("ADMIN", "SUPERVISOR")
+            	    .requestMatchers(HttpMethod.POST, "/tasks/**").hasAnyRole("ADMIN", "SUPERVISOR")
+            	    .requestMatchers(HttpMethod.PUT, "/tasks/**").hasAnyRole("ADMIN", "SUPERVISOR")
+            	    .requestMatchers(HttpMethod.DELETE, "/tasks/**").hasAnyRole("ADMIN", "SUPERVISOR")
 
-                // ADMIN et SUPERVISOR : CRUD tasks
-                .requestMatchers(HttpMethod.GET, "/tasks/**").hasAnyRole("ADMIN", "SUPERVISOR")
-                .requestMatchers(HttpMethod.POST, "/tasks/**").hasAnyRole("ADMIN", "SUPERVISOR")
-                .requestMatchers(HttpMethod.PUT, "/tasks/**").hasAnyRole("ADMIN", "SUPERVISOR")
-                .requestMatchers(HttpMethod.DELETE, "/tasks/**").hasAnyRole("ADMIN", "SUPERVISOR")
-
-
-                .requestMatchers(HttpMethod.GET, "/tasks/user/**").hasRole("USER")
-                .requestMatchers(HttpMethod.PUT, "/tasks/{id}/done/**").hasRole("USER")
-                .requestMatchers(HttpMethod.PUT, "/tasks/{id}/notdone/**").hasRole("USER")
-
-                // Le reste est interdit
-                .anyRequest().authenticated()
-            )
+            	    .anyRequest().authenticated()
+            	)
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

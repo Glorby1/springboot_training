@@ -6,8 +6,12 @@ import com.example.demo.model.Task;
 import com.example.demo.model.User;
 import com.example.demo.repository.TaskRepository;
 import com.example.demo.repository.UserRepository;
+import com.example.demo.security.UserDetailsImpl;
+
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,6 +47,19 @@ public class TaskService {
                 .map(this::mapToDto)
                 .toList();
     }
+    
+    public List<TaskResponseDTO> getMyTasks() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetailsImpl)) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthorized");
+        }
+
+        UserDetailsImpl userDetails = (UserDetailsImpl) authentication.getPrincipal();
+        Long userId = userDetails.getUser().getId();
+
+        return getTasksDtoByUser(userId);
+    }
+    
 
     public TaskResponseDTO createTaskFromDto(TaskRequestDTO dto) {
         User user = null;
