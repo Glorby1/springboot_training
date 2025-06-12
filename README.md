@@ -60,14 +60,15 @@ Now, on postman, curl, or whatever you use for HTTP request :
 9. GET
    http://localhost:8080/tasks
    http://localhost:8080/tasks/{id_task}
-   http://localhost:8080/tasks/user/{user_id} #I just realized that due to security (even if its possible, its annoying for the frontend) I should also have done a /me routing, same for /me/{id}/done just below.
+   http://localhost:8080/tasks/user/{user_id}
+   http://localhost:8080/tasks/user/me (for the connected person's tasks)
 
-10. PUT :
+11. PUT :
    http://localhost:8080/tasks/{id_task}
-   http://localhost:8080/tasks/{id_task}/done #change the boolean for a task, true = done, false = not done, really basic
-   http://localhost:8080/tasks/{id_task}/notdone
+   http://localhost:8080/tasks/me/{id_task}/done #change the boolean for a task, true = done, false = not done, really basic
+   http://localhost:8080/tasks/me/{id_task}/notdone
 
-11. DELETE :
+12. DELETE :
    http://localhost:8080/tasks/{id_task}
     
 
@@ -86,6 +87,7 @@ Spring boot dev tools (reboot on each modification, a bit like angular)
 Lombok (all constructors, getter setter)
 JJWT
 
+Thanks for this first opportunity, Im learning a lot, Im open for any kind of advice :)
 
 
 
