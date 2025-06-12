@@ -55,12 +55,12 @@ Now, on postman, curl, or whatever you use for HTTP request :
    {
       "title": "Kill the database",
       "description": "do a gitpush --force on the group project",
-      "assignedToUserId": 3
+      "assignedToId": 3
    }
 9. GET
    http://localhost:8080/tasks
    http://localhost:8080/tasks/{id_task}
-   http://localhost:8080/tasks/user/{user_id} #did not do a /me because this one can be used for users (to see their own tasks on frontend) with adding a bit of security, but /me is maybe better because easier
+   http://localhost:8080/tasks/user/{user_id} #I just realized that due to security (even if its possible, its annoying for the frontend) I should also have done a /me routing, same for /me/{id}/done just below.
 
 10. PUT :
    http://localhost:8080/tasks/{id_task}
